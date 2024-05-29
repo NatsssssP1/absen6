@@ -120,11 +120,30 @@
     const namaInput = document.getElementById('nama');
     const nimInput = document.getElementById('nim');
 
+    // Clear old local storage data for this form
+    const clearOldStorage = () => {
+        localStorage.removeItem('absensi_sistem_administrasi');
+        localStorage.removeItem('nama_sistem_administrasi');
+        localStorage.removeItem('nim_sistem_administrasi');
+    };
+
+    // Initialize storage if not already done
+    const initializeStorage = () => {
+        if (!localStorage.getItem('initialized_sistem_administrasi')) {
+            clearOldStorage();
+            localStorage.setItem('absensi_sistem_administrasi', JSON.stringify(Array(totalMeetings).fill(null)));
+            localStorage.setItem('initialized_sistem_administrasi', 'true');
+        }
+    };
+
+    // Run initialization
+    initializeStorage();
+
     // Load nama and nim from localStorage
     namaInput.value = localStorage.getItem('nama_sistem_administrasi') || '';
     nimInput.value = localStorage.getItem('nim_sistem_administrasi') || '';
 
-    let absensi = JSON.parse(localStorage.getItem('absensi_sistem_administrasi')) || Array(totalMeetings).fill(null);
+    let absensi = JSON.parse(localStorage.getItem('absensi_sistem_administrasi'));
 
     // Save nama and nim to localStorage on change
     namaInput.addEventListener('input', () => {
